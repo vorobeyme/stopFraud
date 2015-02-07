@@ -30,13 +30,32 @@ class PointsController extends Controller
         $lat  = (int)$request->attributes->get('lat');
 
         try {
-            $pointLocationStatus = $this->getDoctrine()->getManager()
+
+            return new JsonResponse([
+                'status' => 1
+            ]);
+
+        } catch (Exception $e) {
+            return new JsonResponse(['message' => 'server error']);
+        }
+    }
+
+    /**
+     * @Route("/point/long/{long}/lat/{lat}")
+     * @Method("GET")
+     * @Template
+     */
+    public function getPointAction(Request $request)
+    {
+        $long = (int)$request->attributes->get('long');
+        $lat  = (int)$request->attributes->get('lat');
+
+        try {
+            $point = $this->getDoctrine()->getManager()
                 ->getRepository('ApiBundle:PointLocation')
                 ->findValidPoint($long, $lat);
 
-            return new JsonResponse([
-                'status' => $pointLocationStatus
-            ]);
+            return new JsonResponse($point);
 
         } catch (Exception $e) {
             return new JsonResponse(['message' => 'server error']);

@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * PointLocationRepository
@@ -14,21 +15,53 @@ class PointLocationRepository extends EntityRepository
 {
     public function findValidPoint($long, $lat)
     {
-        return 1;
+        $sql = "SELECT
+                  points.id, points.name, description, status, latitude, longitude,
+                  (
+                    3959 * acos (
+                      cos ( radians({$lat}) )
+                      * cos( radians( latitude ) )
+                      * cos( radians( longitude ) - radians({$long}) )
+                      + sin ( radians({$lat}) )
+                      * sin( radians( latitude ) )
+                    )
+                  ) AS distance
+                FROM point_location
+                JOIN points on points.point_location = point_location.id
+                HAVING distance < 1
+                ORDER BY distance
+                LIMIT 1";
+
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+        $points = $stmt->fetchAll();
+
+        return (!empty($points)) ? $points[0] : [];
     }
 
     public function findValidPoints($long, $lat)
     {
-        return [
-            [
-                'id' => 1,
-                'name' => 'test',
-                'description' => 'test',
-                'location' => [
-                    'long' => 1,
-                    'lat' => 1
-                ]
-            ]
-        ];
+        $sql = "SELECT
+                  points.id, points.name, description, status, latitude, longitude,
+                  (
+                    3959 * acos (
+                      cos ( radians({$lat}) )
+                      * cos( radians( latitude ) )
+                      * cos( radians( longitude ) - radians({$long}) )
+                      + sin ( radians({$lat}) )
+                      * sin( radians( latitude ) )
+                    )
+                  ) AS distance
+                FROM point_location
+                JOIN points on points.point_location = point_location.id
+                HAVING distance < 1
+                ORDER BY distance";
+
+
+        $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
     }
 }
