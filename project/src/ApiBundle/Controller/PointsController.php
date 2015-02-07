@@ -10,10 +10,30 @@ class PointsController extends Controller
 {
     public function getPointStatusAction(Request $request)
     {
-        $request = $request->attributes->all();
+        $long = (int)$request->attributes->get('long');
+        $lat  = (int)$request->attributes->get('lat');
+
+        $pointLocationStatus = $this->getDoctrine()->getManager()
+            ->getRepository('ApiBundle:PointLocation')
+            ->findValidPoint($long, $lat);
+
 
         return new JsonResponse([
-            'status' => 1
+            'status' => $pointLocationStatus
         ]);
     }
-}
+
+    public function getPointsAction(Request $request)
+    {
+        $long = (int)$request->attributes->get('long');
+        $lat  = (int)$request->attributes->get('lat');
+
+        $pointLocationStatus = $this->getDoctrine()->getManager()
+            ->getRepository('ApiBundle:PointLocation')
+            ->findValidPoints($long, $lat);
+
+
+        return new JsonResponse([
+            'status' => $pointLocationStatus
+        ]);
+    }}
