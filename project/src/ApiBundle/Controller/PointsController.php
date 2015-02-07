@@ -72,26 +72,35 @@ class PointsController extends Controller
      */
     public function suggestPointAction(Request $request)
     {
-        $req = $request->attributes->all();
+        $entityManager = $this->getDoctrine()->getManager();
 
         try {
+            $lat  = $request->get('lat');
+            $long = $request->get('long');
+            $name = $request->get('name');
+
+            $location = new PointLocation($long, $lat);
+            $entityManager->persist($location);
+
             $point = new Points();
-            $point->setName('testname');
-            $point->setLocation(
-                new PointLocation(1,1)
-            );
+            $point->setName($name);
+            $point->setLocation($location);
 
             $validator = $this->get('validator');
             $errors = $validator->validate($point);
 
-            if (count($errors) > 0) {
-                return new JsonResponse(['message' => $errors[0]->getMessage()], 400);
+            if (count($errors) == 0) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($point);
+                $entityManager->flush();
+
+                return new JsonResponse(['message' => 'point were suggested and will be checked by moderator']);
             }
 
-            return new JsonResponse(['message' => 'point were suggested and will be checked by moderator']);
+            return new JsonResponse(['message' => $errors[0]->getMessage()], 400);
 
-        } catch (Exception $e ) {
-            return new JsonResponse(['message' => $errors[0]->getMessage()], 500);
+        } catch ( \Exception $e ) {
+            return new JsonResponse(['message' => 'Failed to save point'], 500);
         }
     }
 }
