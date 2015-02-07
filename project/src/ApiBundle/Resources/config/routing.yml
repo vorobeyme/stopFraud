@@ -1,3 +1,8 @@
 annot:
     resource: "@ApiBundle/Controller"
     type:     annotation
+
+points:
+    type: rest
+    resource: ApiBundle\Controller\OrganizationController
+

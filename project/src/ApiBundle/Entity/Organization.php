@@ -3,12 +3,16 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * Organization
  *
  * @ORM\Table("organization")
  * @ORM\Entity(repositoryClass="ApiBundle\Entity\OrganizationRepository")
+ *
+ * @ExclusionPolicy("all")
  */
 class Organization
 {
@@ -32,6 +36,8 @@ class Organization
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     *
+     * @Expose
      */
     private $description;
 
