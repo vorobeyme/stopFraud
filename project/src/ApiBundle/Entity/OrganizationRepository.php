@@ -3,6 +3,7 @@
 namespace ApiBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * OrganizationRepository
@@ -12,4 +13,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrganizationRepository extends EntityRepository
 {
+    public function findAllOrderByName()
+    {
+        $queryBuilder = $this->createQueryBuilder('o')
+            ->orderBy('o.name', 'ASC');
+
+        return $queryBuilder->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findById($id)
+    {
+        $queryBuilder = $this->createQueryBuilder('o')
+            ->where('o.id = :id')
+            ->setParameter('id', $id);
+
+        return $queryBuilder->getQuery()
+            ->getOneOrNullResult(Query::HYDRATE_ARRAY);
+    }
 }

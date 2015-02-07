@@ -42,6 +42,11 @@ class PointLocation
      */
     private $longitude;
 
+    public function __construct($long, $lat)
+    {
+        $this->longitude = $long;
+        $this->latitude  = $lat;
+    }
 
     /**
      * Get id

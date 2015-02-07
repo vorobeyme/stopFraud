@@ -1,11 +1,8 @@
-api_point:
-    path:     /point_status/long/{long}/lat/{lat}
-    defaults: { _controller: ApiBundle:Points:getPointStatus, _format: ~ }
-    requirements:
-        _method: GET
+annot:
+    resource: "@ApiBundle/Controller"
+    type:     annotation
 
-api_points:
-    path:     /points/long/{long}/lat/{lat}
-    defaults: { _controller: ApiBundle:Points:getPoints, _format: ~ }
-    requirements:
-        _method: GET
+points:
+    type: rest
+    resource: ApiBundle\Controller\OrganizationController
+
