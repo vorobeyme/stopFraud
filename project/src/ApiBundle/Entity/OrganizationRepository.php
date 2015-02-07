@@ -26,8 +26,7 @@ class OrganizationRepository extends EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('o')
             ->where('o.id = :id')
-            ->setParameter('id', $id)
-            ;
+            ->setParameter('id', $id);
 
         return $queryBuilder->getQuery()
             ->getOneOrNullResult(Query::HYDRATE_ARRAY);

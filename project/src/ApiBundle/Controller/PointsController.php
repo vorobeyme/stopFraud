@@ -2,6 +2,8 @@
 
 namespace ApiBundle\Controller;
 
+use ApiBundle\Entity\PointLocation;
+use ApiBundle\Entity\Points;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/")
@@ -17,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class PointsController extends Controller
 {
     /**
-     * @Route("/point_status/long/{long}/lat/{lat}", requirements={"long" = "\d+", "lat" = "\d+"})
+     * @Route("/point_status/long/{long}/lat/{lat}")
      * @Method("GET")
      * @Template
      */
@@ -41,7 +44,7 @@ class PointsController extends Controller
     }
 
     /**
-     * @Route("/points/long/{long}/lat/{lat}", requirements={"long" = "\d+", "lat" = "\d+"})
+     * @Route("/points/long/{long}/lat/{lat}")
      * @Method("GET")
      * @Template
      */
@@ -59,6 +62,36 @@ class PointsController extends Controller
 
         } catch (Exception $e) {
             return new JsonResponse(['message' => 'server error']);
+        }
+    }
+
+    /**
+     * @Route("/suggest_point")
+     * @Method("POST")
+     * @Template
+     */
+    public function suggestPointAction(Request $request)
+    {
+        $req = $request->attributes->all();
+
+        try {
+            $point = new Points();
+            $point->setName('testname');
+            $point->setLocation(
+                new PointLocation(1,1)
+            );
+
+            $validator = $this->get('validator');
+            $errors = $validator->validate($point);
+
+            if (count($errors) > 0) {
+                return new JsonResponse(['message' => $errors[0]->getMessage()], 400);
+            }
+
+            return new JsonResponse(['message' => 'point were suggested and will be checked by moderator']);
+
+        } catch (Exception $e ) {
+            return new JsonResponse(['message' => $errors[0]->getMessage()], 500);
         }
     }
 }
