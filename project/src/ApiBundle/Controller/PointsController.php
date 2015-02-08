@@ -95,7 +95,7 @@ class PointsController extends Controller
 
         try {
             $lat  = $request->get('lat');
-            $long = $request->get('long');
+            $long = $request->get('lon');
             $name = $request->get('name');
 
             $location = new PointLocation($long, $lat);
@@ -104,6 +104,7 @@ class PointsController extends Controller
             $point = new Points();
             $point->setName($name);
             $point->setLocation($location);
+            $point->setStatus(Points::PRECESSED);
 
             $validator = $this->get('validator');
             $errors = $validator->validate($point);

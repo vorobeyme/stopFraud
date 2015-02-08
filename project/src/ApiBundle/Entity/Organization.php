@@ -277,4 +277,9 @@ class Organization
     {
         return $this->preview;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

@@ -31,14 +31,14 @@ class PointLocation
     /**
      * @var integer
      *
-     * @ORM\Column(name="latitude", type="integer")
+     * @ORM\Column(name="latitude", type="string", length=255)
      */
     private $latitude;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="longitude", type="integer")
+     * @ORM\Column(name="longitude",  type="string", length=255)
      */
     private $longitude;
 
@@ -125,5 +125,10 @@ class PointLocation
     public function getLongitude()
     {
         return $this->longitude;
+    }
+
+    public function __toString()
+    {
+        return $this->longitude . ', ' . $this->latitude;
     }
 }

@@ -26,11 +26,10 @@ class Points
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="organization_id", type="integer")
-     */
-    private $organizationId;
+     * @ORM\ManyToOne(targetEntity="Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
+     **/
+    private $organization;
 
     /**
      * @var string
@@ -72,12 +71,12 @@ class Points
     /**
      * Set organizationId
      *
-     * @param integer $organizationId
+     * @param integer $organization
      * @return Points
      */
-    public function setOrganizationId($organizationId)
+    public function setOrganization($organization)
     {
-        $this->organizationId = $organizationId;
+        $this->organization = $organization;
 
         return $this;
     }
@@ -87,9 +86,9 @@ class Points
      *
      * @return integer 
      */
-    public function getOrganizationId()
+    public function getOrganization()
     {
-        return $this->organizationId;
+        return $this->organization;
     }
 
     /**
@@ -175,5 +174,10 @@ class Points
     public function setLocation(PointLocation $location)
     {
         $this->location = $location;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }
