@@ -47,8 +47,8 @@ class PointsController extends Controller
      */
     public function getPointAction(Request $request)
     {
-        $long = (int)$request->attributes->get('long');
-        $lat  = (int)$request->attributes->get('lat');
+        $long = (float)$request->attributes->get('long');
+        $lat  = (float)$request->attributes->get('lat');
 
         try {
             $point = $this->getDoctrine()->getManager()
@@ -69,8 +69,8 @@ class PointsController extends Controller
      */
     public function getPointsAction(Request $request)
     {
-        $long = (int)$request->attributes->get('long');
-        $lat  = (int)$request->attributes->get('lat');
+        $long = (float)$request->attributes->get('long');
+        $lat  = (float)$request->attributes->get('lat');
 
         try {
             $pointLocationStatus = $this->getDoctrine()->getManager()
@@ -91,19 +91,13 @@ class PointsController extends Controller
      */
     public function suggestPointAction(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-
         try {
             $lat  = $request->get('lat');
             $long = $request->get('lon');
             $name = $request->get('name');
 
-            $location = new PointLocation($long, $lat);
-            $entityManager->persist($location);
-
             $point = new Points();
             $point->setName($name);
-            $point->setLocation($location);
             $point->setStatus(Points::PRECESSED);
 
             $validator = $this->get('validator');
@@ -112,6 +106,10 @@ class PointsController extends Controller
             if (count($errors) == 0) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($point);
+
+                $location = new PointLocation($long, $lat);
+                $location->setPointId($point);
+                $entityManager->persist($location);
                 $entityManager->flush();
 
                 return new JsonResponse(['message' => 'point were suggested and will be checked by moderator']);

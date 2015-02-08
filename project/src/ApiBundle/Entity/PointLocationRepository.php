@@ -13,25 +13,32 @@ use Doctrine\ORM\Query\ResultSetMapping;
  */
 class PointLocationRepository extends EntityRepository
 {
-    public function findValidPoint($long, $lat)
+    const EARTH_RADIUS = 6378137; // meters
+    
+    /**
+     *
+     * @param float $lng Longitude
+     * @param float $lat Latitude
+     * @param integer $maxDistance Max allowed distance in meters
+     * @return array
+     */
+    public function findValidPoint($lng, $lat, $maxDistance = 1000)
     {
-        $sql = "SELECT
-                  points.id, points.name, description, status, latitude, longitude,
-                  (
-                    3959 * acos (
-                      cos ( radians({$lat}) )
-                      * cos( radians( latitude ) )
-                      * cos( radians( longitude ) - radians({$long}) )
-                      + sin ( radians({$lat}) )
-                      * sin( radians( latitude ) )
-                    )
-                  ) AS distance
-                FROM point_location
-                JOIN points on points.point_location = point_location.id
-                HAVING distance < 1
-                ORDER BY distance
-                LIMIT 1";
-
+        $sql = sprintf('SELECT p.id, p.name, p.description, p.`status`, pl.latitude, pl.longitude,
+                        (
+                          %F * acos (
+                            cos ( radians(%2$F) )
+                            * cos( radians( pl.latitude ) )
+                            * cos( radians( pl.longitude ) - radians(%3$F) )
+                            + sin ( radians(%2$F) )
+                            * sin( radians( pl.latitude ) )
+                          )
+                        ) AS distance
+                        FROM point_location pl
+                        JOIN points p on p.id = pl.point_id
+                        HAVING distance < %4$d
+                        ORDER BY distance
+                        LIMIT 1', self::EARTH_RADIUS, $lat, $lng, $maxDistance);
 
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();
@@ -40,24 +47,29 @@ class PointLocationRepository extends EntityRepository
         return (!empty($points)) ? $points[0] : [];
     }
 
-    public function findValidPoints($long, $lat)
+    /**
+     *
+     * @param float $lng Longitude
+     * @param float $lat Latitude
+     * @param integer $maxDistance Max allowed distance in meters
+     * @return array
+     */
+    public function findValidPoints($lng, $lat, $maxDistance = 1000)
     {
-        $sql = "SELECT
-                  points.id, points.name, description, status, latitude, longitude,
-                  (
-                    3959 * acos (
-                      cos ( radians({$lat}) )
-                      * cos( radians( latitude ) )
-                      * cos( radians( longitude ) - radians({$long}) )
-                      + sin ( radians({$lat}) )
-                      * sin( radians( latitude ) )
-                    )
-                  ) AS distance
-                FROM point_location
-                JOIN points on points.point_location = point_location.id
-                HAVING distance < 1
-                ORDER BY distance";
-
+        $sql = sprintf('SELECT p.id, p.name, p.description, p.`status`, pl.latitude, pl.longitude,
+                        (
+                          %F * acos (
+                            cos ( radians(%2$F) )
+                            * cos( radians( pl.latitude ) )
+                            * cos( radians( pl.longitude ) - radians(%3$F) )
+                            + sin ( radians(%2$F) )
+                            * sin( radians( pl.latitude ) )
+                          )
+                        ) AS distance
+                        FROM point_location pl
+                        JOIN points p on p.id = pl.point_id
+                        HAVING distance < %4$d
+                        ORDER BY distance', self::EARTH_RADIUS, $lat, $lng, $maxDistance);
 
         $stmt = $this->getEntityManager()->getConnection()->prepare($sql);
         $stmt->execute();

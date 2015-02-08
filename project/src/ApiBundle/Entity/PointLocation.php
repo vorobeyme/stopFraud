@@ -22,10 +22,9 @@ class PointLocation
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="point_id", type="integer")
-     */
+     * @ORM\ManyToOne(targetEntity="Points")
+     * @ORM\JoinColumn(name="point_id", referencedColumnName="id")
+     **/
     private $pointId;
 
     /**
