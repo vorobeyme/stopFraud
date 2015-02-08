@@ -19,6 +19,12 @@ class OrganizationAdmin extends Admin
     {
         $formMapper
             ->add('name', 'text', array('label' => 'Post Title'))
+            ->add('description', 'text', array('label' => 'Post description'))
+            ->add('certificate', 'text', array('label' => 'Certificate'))
+            ->add('address', 'text', array('label' => 'Address'))
+            ->add('phone', 'text', array('label' => 'Phone'))
+            ->add('email', 'text', array('label' => 'Email'))
+            ->add('website', 'text', array('label' => 'Website'))
         ;
     }
 
@@ -27,6 +33,12 @@ class OrganizationAdmin extends Admin
     {
         $datagridMapper
             ->add('name')
+            ->add('description')
+            ->add('certificate')
+            ->add('address')
+            ->add('phone')
+            ->add('email')
+            ->add('website')
         ;
     }
 
