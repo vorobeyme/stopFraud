@@ -12,6 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Points
 {
+    const VERIFIED  = 1;
+    const FAKE      = 0;
+    const PRECESSED = 2;
+
     /**
      * @var integer
      *
@@ -47,7 +51,7 @@ class Points
      *
      * @ORM\Column(name="status", type="integer")
      */
-    private $status;
+    private $status = self::PRECESSED;
 
     /**
      * @ORM\OneToOne(targetEntity="PointLocation")
