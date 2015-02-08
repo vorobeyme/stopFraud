@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bcea506d15ec250832690e344ef32ea9",
+    "hash": "1c93447189b2495a6db5b16aa38c8496",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -717,12 +717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSRestBundle.git",
-                "reference": "1927ca59a934296e2361f3d1fe7f7a1788bb5acc"
+                "reference": "eba4e4475beaba84f0809315ec383f7f16abbb02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/1927ca59a934296e2361f3d1fe7f7a1788bb5acc",
-                "reference": "1927ca59a934296e2361f3d1fe7f7a1788bb5acc",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSRestBundle/zipball/eba4e4475beaba84f0809315ec383f7f16abbb02",
+                "reference": "eba4e4475beaba84f0809315ec383f7f16abbb02",
                 "shasum": ""
             },
             "require": {
@@ -786,7 +786,7 @@
             "keywords": [
                 "rest"
             ],
-            "time": "2015-02-06 20:22:34"
+            "time": "2015-02-07 16:09:55"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -2283,7 +2283,6 @@
         "nelmio/api-doc-bundle": 20
     },
     "prefer-stable": false,
-    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },
