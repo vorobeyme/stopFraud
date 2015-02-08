@@ -53,8 +53,7 @@ class Points
     private $status = self::PRECESSED;
 
     /**
-     * @ORM\OneToOne(targetEntity="PointLocation")
-     * @ORM\JoinColumn(name="point_location", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="PointLocation", mappedBy="pointId")
      **/
     private $location;
 

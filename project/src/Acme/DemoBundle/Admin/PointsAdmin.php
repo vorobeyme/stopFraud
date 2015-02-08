@@ -18,8 +18,11 @@ class PointsAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', 'text', array('label' => 'Post Title'))
-            ->add('organization', 'entity', array('class' => 'ApiBundle\Entity\Organization', 'property'  => 'name'))
+            ->add('name', 'text', array('label' => 'Name of location'))
+            ->add('description')
+            ->add('status', 'choice', array('choices' => [0 => 'FAKE', 1 => 'VERIFIED', 2 => 'PRECESSED']))
+            ->add('location')
+//            ->add('organization', 'entity', array('class' => 'ApiBundle\Entity\Organization', 'property'  => 'name'))
         ;
     }
 
@@ -28,7 +31,10 @@ class PointsAdmin extends Admin
     {
         $datagridMapper
             ->add('name')
-            ->add('organization')
+            ->add('description')
+            ->add('status')
+            ->add('location')
+//            ->add('organization')
         ;
     }
 
