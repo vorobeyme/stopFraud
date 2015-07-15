@@ -1,3 +1,0 @@
-api_point:
-    path:     /point_status
-    defaults: { _controller: ApiBundle:Points:getPointStatus }
